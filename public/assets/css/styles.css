@@ -113,6 +113,43 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.wrap {
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+
+#inputEmail {
+  margin: 20px 0;
+}
+
+#inputPassword {
+  margin: 20px 0;
+}
+
+.inscription {
+  text-align: center;
+}
+
+#registration_form_username {
+  margin: 20px 0;
+}
+
+#registration_form_email {
+  margin: 20px 0;
+}
+
+#registration_form_avatar {
+  margin: 20px 0;
+}
+
+#registration_form_plainPassword {
+  margin: 20px 0;
+}
+
+#registration_form_agreeTerms {
+  margin-left: 20px;
+}
+
 hr {
   margin: 1rem 0;
   color: inherit;
@@ -1937,6 +1974,10 @@ progress {
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+form h1 {
+  text-align: center;
 }
 
 @media (max-width: 575.98px) {
@@ -8181,6 +8222,11 @@ textarea.form-control-lg {
 .bg-white {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-aliceblue {
+  --bs-bg-opacity: 1;
+  background-color:aliceblue;
 }
 
 .bg-body {
