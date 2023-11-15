@@ -7,7 +7,7 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
-    <div class="wrap py-4 bg-lightblue overflow-hidden col-12 col-md-8 col-lg-6 col-xl-3" style="display: flex; flex-direction: column; align-items: center;">
+    <div class="wrap py-4 bg-lightblue overflow-hidden col-12 col-md-8 col-lg-6 col-xl-4" style="display: flex; flex-direction: column; align-items: center;">
         <div class="inscription">
             <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
         </div>
@@ -17,7 +17,6 @@
             <fieldset>
                 {{ form_row(registrationForm.username) }}
                 {{ form_row(registrationForm.email) }}
-                {{ form_row(registrationForm.avatar) }}
                 {{ form_row(registrationForm.plainPassword, {
                     label: 'Mot de passe'
                 }) }}

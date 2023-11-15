@@ -32,17 +32,11 @@ class RegistrationFormType extends AbstractType
                 ],
                 'label' => 'Nom d\'utilisateur'
             ])
-            ->add('avatar', FileType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-                ],
-                'label' => 'Avatar'
-            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accépter la politique de confidentialité.',
                     ]),
                 ],
                 'label'=> 'J\'ai lu et j\'accepte la politique de confidentialité'
@@ -59,7 +53,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a password',
                     ]),
                     new Length([
-                        'min' => 6,
+                        'min' => 8,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,

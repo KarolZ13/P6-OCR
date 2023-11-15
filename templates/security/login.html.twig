@@ -4,7 +4,7 @@
 
 {% block body %}
 <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
-    <div class="wrap py-4 bg-lightblue overflow-hidden col-12 col-md-8 col-lg-6 col-xl-3">
+    <div class="wrap py-4 bg-lightblue overflow-hidden col-12 col-md-8 col-lg-6 col-xl-4">
         <form method="post">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -18,7 +18,7 @@
 
             <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
             <label for="inputEmail">Nom d'utilisateur</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+            <input type="username" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
             <label for="inputPassword">Mot de passe</label>
             <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">

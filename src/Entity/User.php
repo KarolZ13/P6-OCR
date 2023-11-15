@@ -32,14 +32,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $username = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
-
-    #[ORM\Column]
-    private ?bool $is_enable = null;
 
     #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: Trick::class, orphanRemoval: true)]
     private Collection $trick;
@@ -80,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -146,18 +143,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): static
     {
         $this->avatar = $avatar;
-
-        return $this;
-    }
-
-    public function isIsEnable(): ?bool
-    {
-        return $this->is_enable;
-    }
-
-    public function setIsEnable(bool $is_enable): static
-    {
-        $this->is_enable = $is_enable;
 
         return $this;
     }
