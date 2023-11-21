@@ -6,8 +6,11 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Cocur\Slugify\Slugify;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[UniqueEntity(fields: ['slug'], message: 'La figure est déjà existante')]
 class Trick
 {
     #[ORM\Id]
@@ -23,13 +26,13 @@ class Trick
 
     #[ORM\ManyToOne(inversedBy: 'trick')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $id_user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'trick')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $id_categories = null;
+    private ?Category $categories = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
     #[ORM\Column]
@@ -38,13 +41,13 @@ class Trick
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'id_trick', targetEntity: Picture::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, orphanRemoval: true)]
     private Collection $picture;
 
-    #[ORM\OneToMany(mappedBy: 'id_trick', targetEntity: Video::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true)]
     private Collection $video;
 
-    #[ORM\OneToMany(mappedBy: 'id_trick', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comment;
 
     public function __construct()
@@ -67,6 +70,7 @@ class Trick
     public function setTitle(string $title): static
     {
         $this->title = $title;
+        $this->slug = (new Slugify())->slugify($title);
 
         return $this;
     }
@@ -85,24 +89,24 @@ class Trick
 
     public function getIdUser(): ?User
     {
-        return $this->id_user;
+        return $this->user;
     }
 
-    public function setIdUser(?User $id_user): static
+    public function setIdUser(?User $user): static
     {
-        $this->id_user = $id_user;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getIdCategories(): ?Category
     {
-        return $this->id_categories;
+        return $this->categories;
     }
 
-    public function setIdCategories(?Category $id_categories): static
+    public function setIdCategories(?Category $categories): static
     {
-        $this->id_categories = $id_categories;
+        $this->categories = $categories;
 
         return $this;
     }
@@ -110,13 +114,6 @@ class Trick
     public function getSlug(): ?string
     {
         return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -155,7 +152,7 @@ class Trick
     {
         if (!$this->picture->contains($picture)) {
             $this->picture->add($picture);
-            $picture->setIdTrick($this);
+            $picture->setTrick($this);
         }
 
         return $this;
@@ -165,8 +162,8 @@ class Trick
     {
         if ($this->picture->removeElement($picture)) {
             // set the owning side to null (unless already changed)
-            if ($picture->getIdTrick() === $this) {
-                $picture->setIdTrick(null);
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
             }
         }
 

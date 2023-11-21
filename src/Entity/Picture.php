@@ -18,7 +18,7 @@ class Picture
 
     #[ORM\ManyToOne(inversedBy: 'picture')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Trick $id_trick = null;
+    private ?Trick $trick = null;
 
     public function getId(): ?int
     {
@@ -37,14 +37,14 @@ class Picture
         return $this;
     }
 
-    public function getIdTrick(): ?Trick
+    public function getTrick(): ?Trick
     {
-        return $this->id_trick;
+        return $this->trick;
     }
 
-    public function setIdTrick(?Trick $id_trick): static
+    public function setTrick(?Trick $trick): static
     {
-        $this->id_trick = $id_trick;
+        $this->trick = $trick;
 
         return $this;
     }

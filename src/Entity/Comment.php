@@ -19,11 +19,11 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comment')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $id_user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comment')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Trick $id_trick = null;
+    private ?Trick $trick = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -47,24 +47,24 @@ class Comment
 
     public function getIdUser(): ?User
     {
-        return $this->id_user;
+        return $this->user;
     }
 
-    public function setIdUser(?User $id_user): static
+    public function setIdUser(?User $user): static
     {
-        $this->id_user = $id_user;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getIdTrick(): ?Trick
     {
-        return $this->id_trick;
+        return $this->trick;
     }
 
-    public function setIdTrick(?Trick $id_trick): static
+    public function setIdTrick(?Trick $trick): static
     {
-        $this->id_trick = $id_trick;
+        $this->trick = $trick;
 
         return $this;
     }
