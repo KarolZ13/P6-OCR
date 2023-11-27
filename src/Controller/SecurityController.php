@@ -44,4 +44,27 @@ class SecurityController extends AbstractController
        return $this->render('main/details-trick.html.twig');
    }
 
+   #[Route(path: '/reset-password', name: 'app_reset_password')]
+   public function resetPassword(): Response
+   {
+       return $this->render('main/reset-password.html.twig');
+   }
+
+   #[Route(path: '/modify', name: 'app_modify_trick')]
+   public function modifyTrick(): Response
+   {
+       return $this->render('main/modify-trick.html.twig');
+   }
+
+   #[Route(path: '/add', name: 'app_add_trick')]
+   public function addTrick(): Response
+   {
+       return $this->render('main/add-trick.html.twig');
+   }
+
+   #[Route(path: '/profil', name: 'app_user_profil')]
+   public function userProfil(): Response
+   {
+       return $this->render('security/user-profil.html.twig');
+   }
 }
