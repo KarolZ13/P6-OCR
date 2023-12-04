@@ -34,6 +34,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Création d'un jeton
             $token = md5(uniqid());
             $user->setToken($token);
             $user->setPassword(
@@ -42,10 +43,11 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            // Stocker en base de donnée les informations
             $entityManager->persist($user);
             $entityManager->flush();
 
+            // Envoyer un mail de confirmation pour valider le compte
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('admin@snowtricks.fr', 'No Reply'))
@@ -75,7 +77,7 @@ class RegistrationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // validate email confirmation link, sets User::isVerified=true and persists
+        // Lien de validation par mail. Mise en place de User::isVerified=true et stocker en base de données
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
@@ -84,7 +86,6 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Votre adresse mail à bien été vérifié.');
 
         return $this->redirectToRoute('app_login');
