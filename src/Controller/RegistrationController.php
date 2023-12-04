@@ -15,6 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -33,7 +34,8 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            $token = md5(uniqid());
+            $user->setToken($token);
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -44,16 +46,22 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('admin@snowtricks.fr', 'No Reply'))
                     ->to($user->getEmail())
                     ->subject('Veuillez vérifier votre adresse mail')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->context([
+                        'signedUrl' => $this->generateUrl(
+                            'app_verify_email',
+                            ['token' => $token],
+                            UrlGeneratorInterface::ABSOLUTE_URL
+                        ),
+                    ])
             );
-            // do anything else you need here, like send an email
 
+            $this->addFlash('success', 'Veuillez vérifier votre adresse mail pour activer votre compte');
             return $this->redirectToRoute('app_main');
         }
 
@@ -79,6 +87,6 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Votre adresse mail à bien été vérifié.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_login');
     }
 }

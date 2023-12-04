@@ -3,6 +3,11 @@
 {% block title %}Accueil | SnowTricks{% endblock %}
 
 {% block body %}
+{% for flashMessage in app.flashes('success') %}
+    <div class="alert1 alert-success">
+        {{ flashMessage }}
+    </div>
+{% endfor %}
 <header class="bg-black py-2">
     <span id="nav"></span>
     <div class="image" style="position: relative;">
@@ -17,24 +22,28 @@
 <section class="py-5">
     <span id="tricks"></span>
     <div class="container px-5 my-5">
-        <div class="row gx-5" id="more-articles">
-            {% for trick in tricks %}
-            <div class="col-lg-3 mb-5">
-                <div class="card h-100 shadow border-0">
-                    <img class="card-img-top" src="https://dummyimage.com/600x350/ced4da/6c757d" alt="..." />
-                    <div class="card-body p-4">
-                        <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
-                        <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">{{ trick.title }}</h5></a>
+        <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
+            <div class="wrap" style="display: flex; flex-direction: column; align-items: center;">
+                <div class="row gx-5" id="more-articles">
+                    {% for trick in tricks %}
+                    <div class="col-lg-3 mb-5">
+                        <div class="card h-100 shadow border-0">
+                            <img class="card-img-top" src="https://dummyimage.com/600x350/ced4da/6c757d" alt="..." />
+                            <div class="card-body p-4">
+                                <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
+                                <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">{{ trick.title }}</h5></a>
+                            </div>
+                        </div>
                     </div>
+                    {% endfor %}
+                </div>
+                <div class="icon-container">
+                    <a href="#more-articles" id="show-more-link"><i class="bi bi-plus-square-fill"></i></a>
                 </div>
             </div>
-            {% endfor %}
         </div>
     </div>
 </section>
-<div class="icon-container">
-    <a href="#more-articles" id="show-more-link"><i class="bi bi-plus-square-fill"></i></a>
-</div>
 <a href="#nav" class="bottom-icon">
     <i class="bi bi-arrow-up-circle-fill"></i>
 </a>

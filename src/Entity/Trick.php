@@ -116,6 +116,13 @@ class Trick
         return $this->slug;
     }
 
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;

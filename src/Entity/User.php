@@ -24,7 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = ['ROLE_USER'];
 
     /**
      * @var string The hashed password
@@ -46,6 +46,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
 
     public function __construct()
     {
@@ -207,7 +210,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isVerified(): bool
+    public function isIsVerified(): bool
     {
         return $this->isVerified;
     }
@@ -215,6 +218,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }
