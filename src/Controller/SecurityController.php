@@ -66,10 +66,10 @@ class SecurityController extends AbstractController
             $entityManager->flush();
     
             $this->addFlash('success', 'Mot de passe mis à jour avec succès.');
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_main');
         }
     
-        return $this->render('main/reset-password.html.twig', [
+        return $this->render('security/reset-password.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -102,7 +102,7 @@ class SecurityController extends AbstractController
                 ->from(new Address('admin@snowtricks.fr', 'No Reply'))
                 ->to($user->getEmail())
                 ->subject('Réinitialisation du mot de passe')
-                ->htmlTemplate('registration/reset_password_email.html.twig')
+                ->htmlTemplate('security/reset_password_email.html.twig')
                 ->context([
                     'resetLink' => $resetLink,
                 ]);
@@ -112,13 +112,13 @@ class SecurityController extends AbstractController
             $this->addFlash('success', 'Veuillez vérifier votre adresse mail !');
             return $this->redirectToRoute('app_forgot_password');
         }
-       return $this->render('main/forgot-password.html.twig', [
+       return $this->render('security/forgot-password.html.twig', [
         'form' => $form->createView(),
        ]);
     }
 
     #[Route(path: '/profil', name: 'app_user_profil')]
-    public function userProfil(Request $request, Security $security, EntityManagerInterface $entityManager): Response
+    public function userProfil(Request $request, Security $security, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = $security->getUser();
         
@@ -127,7 +127,12 @@ class SecurityController extends AbstractController
    
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
- 
+                
+                $newPassword = $form->get('plainPassword')->getData();
+                $hashPassword = $userPasswordHasher->hashPassword($user, $newPassword);
+        
+                $user->setPassword($hashPassword);
+        
                 $entityManager->persist($user);
                 $entityManager->flush();
    

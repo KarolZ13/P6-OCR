@@ -8,16 +8,24 @@
             {{ form_start(form) }}
             <h1 class="h3 mb-3 font-weight-normal">Modifier son profil</h1>
             <div class="mb-4">
-            {{ form_row(form.email) }}
+                <div class="error-red">
+                    {{ form_row(form.email) }}
+                </div>
             </div>
             <div class="mb-4">
-                {{ form_row(form.username) }}
+                <div class="error-red">
+                    {{ form_row(form.username) }}
+                </div>
             </div>
             <div class="mb-4">
-                {{ form_row(form.plainPassword) }}
+                <div class="error-red">
+                    {{ form_row(form.plainPassword) }}
+                </div>
             </div>
             <div class="mb-4">
-                {{ form_row(form.avatar) }}
+                <div class="error-red">
+                    {{ form_row(form.avatar) }}
+                </div>
             </div>
             <div class="inscription mt-4">
                 {{ form_widget(form.submit) }}

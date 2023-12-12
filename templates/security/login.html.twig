@@ -5,17 +5,13 @@
 {% block body %}
 <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
     <div class="wrap py-4 bg-white overflow-hidden col-12 col-md-8 col-lg-6 col-xl-4">
+{% for flashMessage in app.flashes('debug') %}
+    <div class="alert alert-info">{{ flashMessage }}</div>
+{% endfor %}
         <form method="post">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
-
-            {% if app.user %}
-                <div class="mb-3">
-                    Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
-                </div>
-            {% endif %}
-
             <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
             <label for="inputEmail">Nom d'utilisateur</label>
             <input type="username" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
@@ -26,7 +22,7 @@
                 <a href="{{ path('app_forgot_password')}}">Mot de passe oublié ?</a>
             </div>
             <div class="inscription mt-4">
-                <button class="btn btn-primary" type="submit">Connexion</button>
+                <button class="btn btn-secondary" type="submit">Connexion</button>
             </div>
         </form>
     </div>

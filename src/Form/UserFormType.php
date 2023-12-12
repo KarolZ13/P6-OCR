@@ -52,9 +52,6 @@ class UserFormType extends AbstractType
                     'class' => 'form-control',
                     ],
                     'constraints' => [
-                        new NotBlank([
-                            'message' => 'Merci d\'entrer votre mot de passe',
-                        ]),
                         new Length([
                             'min' => 8,
                             'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
@@ -81,7 +78,7 @@ class UserFormType extends AbstractType
                 ])
                 ->add('submit', SubmitType::class, [
                     'label' => 'Valider',
-                    'attr' => ['class' => 'btn btn-primary'],
+                    'attr' => ['class' => 'btn btn-secondary'],
                 ]);
             ;
         }

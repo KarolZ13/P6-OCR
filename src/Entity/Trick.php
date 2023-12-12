@@ -99,12 +99,12 @@ class Trick
         return $this;
     }
 
-    public function getIdCategories(): ?Category
+    public function getCategories(): ?Category
     {
         return $this->categories;
     }
 
-    public function setIdCategories(?Category $categories): static
+    public function setCategories(?Category $categories): static
     {
         $this->categories = $categories;
 

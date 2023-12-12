@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'une figure | SnowTricks{% endblock %}
+
+{% block body %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
+    <div class="wrap py-4 bg-white overflow-hidden col-12 col-md-8 col-lg-6 col-xl-4">
+        {{ form_start(form) }}
+        <h1 class="h3 mb-4 font-weight-normal">Ajouter une figure</h1>
+        {{ form_widget(form.user, {'value': app.user.username, 'attr': {'readonly': true}}) }}
+        <div class="mb-4">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="mb-4">
+            {{ form_row(form.description) }}
+        </div>
+        <div class="mb-4">
+            {{ form_row(form.categories) }}
+        </div>
+        <div class="mb-4">
+            {{ form_row(form.picture) }}
+        </div>
+        <div class="inscription mt-4">
+            {{ form_widget(form.save) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

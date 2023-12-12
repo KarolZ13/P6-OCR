@@ -77,17 +77,17 @@ class RegistrationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Lien de validation par mail. Mise en place de User::isVerified=true et stocker en base de données
+        // Lien de validation par mail. 
+        // Mise en place de User::isVerified=true en base de données
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
             return $this->redirectToRoute('app_register');
         }
-
         $this->addFlash('success', 'Votre adresse mail à bien été vérifié.');
-
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('app_main');
     }
 }

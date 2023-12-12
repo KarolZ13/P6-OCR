@@ -21,36 +21,10 @@
         <link rel="stylesheet" href="{{ asset('assets/js/scripts.js') }}">
         {% endblock %}
     </head>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-black">
-        <div class="container px-5">
-            <a class="navbar-brand" href="{{ path('app_main')}}">SnowTricks</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_main') }}">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#tricks">Tricks</a></li>
-                    {% if app.user %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_user_profil') }}">Mon compte</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
-                    {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Inscription</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
+        {% include "_partials/_nav.html.twig" %}
     <body class="d-flex flex-column h-100">
         {% block body %}{% endblock %}
-        <footer class="bg-black py-4 mt-auto">
-            <div class="container px-5">
-                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto">
-                        <div class="small m-0 text-white">Copyright &copy; SnowTricks 2023 - Karol ZIELINSKI</div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        {% include "_partials/_footer.html.twig" %}
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

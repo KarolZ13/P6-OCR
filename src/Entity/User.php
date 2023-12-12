@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'Un compte est déjà existant avec cette adresse mail')]
-#[UniqueEntity(fields: ['username'], message: "Un compte est déjà existant avec ce nom d'utilisateur")]
+#[UniqueEntity(fields: ['username'], message: 'Un compte est déjà existant avec ce nom d\'utilisateur')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
