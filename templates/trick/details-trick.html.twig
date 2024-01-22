@@ -3,27 +3,68 @@
 {% block title %}Détails de la figure ... | SnowTricks{% endblock %}
 
 {% block body %}
+{% for flashMessage in app.flashes('success') %}
+    <div class="alert1 alert-success">
+        {{ flashMessage }}
+    </div>
+{% endfor %}
 <section class="py-4">
     <div class="container px-4 my-4 text-center wrap">
         <article>
             <!-- Post header-->
-            <header class="mb-4">
+            <header class="mb-4" style="position: relative; text-align: right;">
                 <img class="card-img-top" src="{{ asset('assets/img/' ~ trick.picture.first.name) }}" alt="test">
+                <h1 style="position: absolute; top: 10px; right: 10px; color:white">{{ trick.title|upper }}</h1>
+                {% if app.user and trick.getIdUser() == app.user %}
+                    <div class="list-inline1 card2 bg-light" style="position: absolute; bottom: 10px; right: 10px;">
+                        <a href="{{ path('app_edit_trick', {'slug': trick.slug}) }}" style="margin-right: 7px;">
+                            <button class="btn btn-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                </svg>
+                            </button>
+                        </a>
+                        <a href="{{ path('app_delete_trick', {'slug': trick.slug}) }}">
+                            <button class="btn btn-dark">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                </svg>
+                            </button>
+                        </a>
+                    </div>
+                {% endif %}
             </header>
             <!-- Preview image figure-->
             <div class="row gx-5">
-            {% for picture in trick.picture %}
-                <div class="col-lg-3 mb-5">
-                    <div class="card h-100 shadow border-0">
-                        <img class="card-img-top" src="{{ asset('assets/img/' ~ picture.name) }}" alt="{{ trick.title }}" />
+                {% for picture in trick.getPicture|slice(-2) %}
+                    <div class="col-lg-3 mb-5">
+                        <div class="card h-100 shadow border-0">
+                            <img class="card-img-top" src="{{ asset('assets/img/' ~ picture.getName()) }}" alt="{{ trick.title }}" />
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+                {% for videoId in videoIds %}
+                    <div class="col-lg-3 mb-5">
+                        <div class="card h-100 shadow border-0">
+                            {% if videoId %}
+                                <iframe width="100%" height="200" src="https://www.youtube.com/embed/{{ videoId }}" frameborder="0" allowfullscreen></iframe>
+                            {% else %}
+                                <!-- Afficher un message d'erreur ou une alternative si l'URL n'est pas valide -->
+                                <p>URL de vidéo non valide</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
             <!-- Post content-->
-            <section class="mb-5">
-                <h5 class="fw-bolder mb-4 mt-5">Description de la figure {{trick.title}}</h5>
-                <p>{{trick.description}}</p>
+            <section class="mb-3">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="fw-bolder mb-4 mt-3">Description de la figure {{trick.title}} :</h5>
+                    <p>{{trick.description}}</p>
+                </div>
+            </div>
             </section>
             <ul class="list-inline trick-data card1 bg-light">
                 <li class="list-inline-item">
@@ -32,11 +73,11 @@
                 <li class="list-inline-item">
                     Ajouté le {{ trick.createdAt|date('d/m/Y')}} 
                     {% if trick.updatedAt %}
-                        (<small>Mise à jour le : {{trick.updateAt|date('d/m/Y')}}</small>)
+                        (<small>Mise à jour le : {{trick.updatedAt|date('d/m/Y')}}</small>)
                     {% endif %}
                 </li> |                            
                 <li class="list-inline-item">
-                    Catégorie : Grabs
+                    Catégorie : {{trick.categories.name}}
                 </li> |
                 <li class="list-inline-item">
                     {% set commentCount = trick.comment | length %}
@@ -49,22 +90,46 @@
             <div class="card bg-light">
                 <div class="card-body">
                     {% if app.user %}
-                        <form class="mb-4">
-                            <textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
-                            <button type="submit" class="btn btn-primary mt-2">Submit</button>
-                        </form>
-                    {% else %}
-                        <p class="text-muted">Vous devez être connecté pour ajouter un commentaire.</p>
-                    {% endif %}
-                    {% for comment in trick.comment %}
-                        <div class="d-flex comment">
-                            <div class="flex-shrink-0"><img class="rounded-circle" src="{{ comment.user.avatar ?? 'https://dummyimage.com/50x50/ced4da/6c757d.jpg' }}" alt="..." /></div>
-                            <div class="comment-left">
-                                <div class="fw-bold">{{ comment.idUser.username }}</div>
-                            {{ comment.content }}
-                            </div>
+                        <div class="mb-4">
+                            {{ form_start(form) }}
                         </div>
-                    {% endfor %}
+                        <div class="mb-4">
+                            {{ form_row(form.content) }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form_end(form) }}
+                        </div>
+                    {% else %}
+                    <a href="{{ path('app_login') }}">
+                        <p class="text-muted">Vous devez être connecté pour ajouter un commentaire.</p>
+                    </a>
+                    {% endif %}
+                    <div class="comments-container">
+                        {% if trick.comment|length > 0 %}
+                            {% set sortedComments = trick.comment|sort((a, b) => b.createdAt.timestamp - a.createdAt.timestamp) %}
+                            {% for comment in sortedComments %}
+                                <div class="comment">
+                                    <div class="d-flex">
+                                        {% if comment.idUser.avatar %}
+                                            <img class="rounded-circle" src="{{ asset('assets/img/' ~ comment.idUser.avatar) }}" alt="..." style="height: 6%; width: 6%">
+                                        {% else %}
+                                            <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." style="height: 5%; width: 5%">
+                                        {% endif %}    
+                                        <div class="comment-left">
+                                            <div class="fw-bold">{{ comment.idUser.username }} - {{ comment.createdAt|date('d/m/Y H:i:s') }}</div>
+                                            {{ comment.content }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>Pas de commentaire sur cette figure</p>
+                        {% endif %}
+                    </div>
+                    <div class="pagination-container">
+                        <button class="btn btn-secondary" id="prevPage">Page précédente</button>
+                        <button class="btn btn-secondary" id="nextPage">Page suivante</button>
+                    </div>
                 </div>
             </div>
         </section>

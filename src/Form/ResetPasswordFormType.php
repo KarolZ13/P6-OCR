@@ -11,6 +11,13 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class ResetPasswordFormType extends AbstractType
 {
+
+
+    /**
+     * Short description here.
+     *
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

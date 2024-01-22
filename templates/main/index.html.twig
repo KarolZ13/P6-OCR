@@ -3,20 +3,35 @@
 {% block title %}Accueil | SnowTricks{% endblock %}
 
 {% block body %}
-{% for flashMessage in app.flashes('success') %}
-    <div class="alert1 alert-success">
-        {{ flashMessage }}
-    </div>
-{% endfor %}
-<header class="bg-black py-2">
+    {% for flashMessage in app.flashes('success') %}
+        <div class="alert1 alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.flashes('success1') %}
+        <div class="alert1 alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.flashes('success2') %}
+        <div class="alert1 alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.flashes('success3') %}
+        <div class="alert1 alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+<header class="bg-black">
     <span id="nav"></span>
-    <div class="image" style="position: relative;">
+    <div class="image" style="position: relative; border-left: 2px solid black; border-right: 2px solid black; border-bottom: 2px solid black">
         <div class="booticon">
             <a href="#tricks">
                 <i class="bi bi-arrow-down-circle-fill bi-icon"></i>
             </a>
         </div>
-        <h1>SnowTricks</br>Le site communautaire qui regroupe</br>tous les tricks du snowboard</h1>
+        <h1>SnowTricks</br>Le site communautaire</br> qui regroupe tous</br> les tricks du snowboard</h1>
     </div>
 </header>
 <section class="py-5">
@@ -24,10 +39,10 @@
     <div class="container px-5 my-5">
         <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
             <div class="wrap" style="display: flex; flex-direction: column; align-items: center;">
-                <div class="row gx-5" id="more-articles">
+                <div class="row-1 gx-5" id="more-articles">
                     {% for trick in tricks %}
                     <div class="col-lg-3 mb-5">
-                        <div class="card h-100 shadow border-0">
+                        <div class="card h-100 shadow border-6">
                             <a class="text-decoration-none link-dark" href="{{ path('app_details_trick', {'slug': trick.slug}) }}">
                             {% if trick.picture|length > 0 %}
                                 <img class="card-img-top" src="{{ asset('assets/img/' ~ trick.picture.first.name) }}" alt="..." />
@@ -40,11 +55,11 @@
                                     <div class="division">
                                         <div class="block1">
                                             <h5 class="card-title1 mb-3">
-                                                {{ trick.title }}
+                                                {{ trick.title}}
                                             </h5>
                                         </div>
                                         <div class="block2">
-                                            {% if app.user %}
+                                            {% if app.user and trick.getIdUser() == app.user %}
                                                 <a href="{{ path('app_edit_trick', {'slug': trick.slug}) }}">
                                                     <button class="btn btn-secondary">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">

@@ -3,6 +3,16 @@
 {% block title %}Modification du profil | SnowTricks{% endblock %}
 
 {% block body %}
+    {% for flashMessage in app.flashes('success1') %}
+        <div class="alert1 alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.flashes('error5') %}
+        <div class="alert1 alert-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
     <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
         <div class="wrap py-4 bg-white overflow-hidden col-12 col-md-8 col-lg-6 col-xl-4">
             {{ form_start(form) }}

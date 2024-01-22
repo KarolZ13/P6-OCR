@@ -42,10 +42,10 @@ class Video
         return $this->trick;
     }
 
-    public function setIdTrick(?Trick $trick): static
+    public function setTrick(?Trick $trick): static
     {
         $this->trick = $trick;
-
+    
         return $this;
     }
 }

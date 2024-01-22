@@ -19,6 +19,12 @@
 
         {% block javascripts %}
         <link rel="stylesheet" href="{{ asset('assets/js/scripts.js') }}">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="{{ asset('assets/js/Pagination.js') }}"></script>
+        <script src="{{ asset('assets/js/Picture.js') }}"></script>
+        <script src="{{ asset('assets/js/DeletePicture.js') }}"></script>
+        <script src="{{ asset('assets/js/DeleteVideo.js') }}"></script>
+        <script src="{{ asset('assets/js/AddVideo.js') }}"></script>
         {% endblock %}
     </head>
         {% include "_partials/_nav.html.twig" %}

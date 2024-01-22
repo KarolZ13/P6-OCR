@@ -19,17 +19,23 @@ use App\Form\UserFormType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SecurityController extends AbstractController
 {
 
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, Security $security): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
 
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        if (!$error && $security->getUser() !== null) {
+            $this->addFlash('success3', 'Vous êtes désormais connecté.');
+            return $this->redirectToRoute('app_main');
+        }
+    
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
@@ -109,7 +115,7 @@ class SecurityController extends AbstractController
 
             $mailer->send($email);
 
-            $this->addFlash('success', 'Veuillez vérifier votre adresse mail !');
+            $this->addFlash('success3', 'Veuillez vérifier votre adresse mail !');
             return $this->redirectToRoute('app_forgot_password');
         }
        return $this->render('security/forgot-password.html.twig', [
@@ -124,27 +130,43 @@ class SecurityController extends AbstractController
         
         if ($user instanceof User) {
             $form = $this->createForm(UserFormType::class, $user);
-   
+       
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 
+                // Vérifier si un nouveau mot de passe est fourni
                 $newPassword = $form->get('plainPassword')->getData();
-                $hashPassword = $userPasswordHasher->hashPassword($user, $newPassword);
-        
-                $user->setPassword($hashPassword);
-        
-                $entityManager->persist($user);
-                $entityManager->flush();
-   
-                $this->addFlash('success', 'Profil mis à jour avec succès.');
+    
+                // Comparer directement les chaînes du nouveau et de l'ancien mot de passe
+                if ($userPasswordHasher->isPasswordValid($user, $newPassword)) {
+                    $this->addFlash('error5', 'Le nouveau mot de passe doit être différent de l\'ancien.');
+                } else {
+                    // Hasher le mot de passe seulement s'il est différent de l'ancien
+                    if (!empty($newPassword)) {
+                        $hashPassword = $userPasswordHasher->hashPassword($user, $newPassword);
+                        $user->setPassword($hashPassword);
+                    }
+    
+                    // Vérifier si un avatar est fourni
+                    $newAvatar = $form->get('avatar')->getData();
+                    if ($newAvatar instanceof UploadedFile) {
+                        $user->setAvatar($newAvatar->getClientOriginalName());
+                        $newAvatar->move('assets/img', $newAvatar->getClientOriginalName());
+                    }
+    
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+       
+                    $this->addFlash('success1', 'Profil mis à jour avec succès.');
+                }
             }
-   
+       
             return $this->render('main\user-profil.html.twig', [
                'form' => $form->createView(),
                'user' => $user,
             ]);
         }
+    
         return $this->redirectToRoute('app_login');
-    }
-   
+    }    
 }

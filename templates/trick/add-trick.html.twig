@@ -6,10 +6,12 @@
 <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
     <div class="wrap py-4 bg-white overflow-hidden col-12 col-md-8 col-lg-6 col-xl-4">
         {{ form_start(form) }}
-        <h1 class="h3 mb-4 font-weight-normal">Ajouter une figure</h1>
+        <h1 class="h3 mb-4 font-weight-normal">Ajouter un trick</h1>
         {{ form_widget(form.user, {'value': app.user.username, 'attr': {'readonly': true}}) }}
         <div class="mb-4">
-            {{ form_row(form.title) }}
+            <div class="error-red">
+                {{ form_row(form.title) }}
+            </div>
         </div>
         <div class="mb-4">
             {{ form_row(form.description) }}
@@ -19,6 +21,15 @@
         </div>
         <div class="mb-4">
             {{ form_row(form.picture) }}
+        </div>
+        <div class="mb-4 video-container">
+            <p>Ajouter une ou plusieurs vidéos (Youtube) :</p>
+            <ul class="video" data-prototype="{{ form_widget(form.video.vars.prototype)|e('html_attr') }}"></ul>
+            <a href="#" class="add-another-video">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                </svg>
+            </a>
         </div>
         <div class="inscription mt-4">
             {{ form_widget(form.save) }}

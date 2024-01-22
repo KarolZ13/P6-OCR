@@ -91,6 +91,14 @@
   }
 }
 
+#add_trick_form_video {
+  display: none;
+}
+
+#edit_trick_form_video  {
+  display: none;
+}
+
 #more-articles .col-lg-3:nth-child(n+9) {
   display: none;
 }
@@ -109,15 +117,14 @@
 
 .division {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
-.block1 {
-  overflow: hidden;
-}
+
 
 .block2 {
-  
+  display: flex;
+  justify-content: space-between;
 }
 
 .card1 {
@@ -205,6 +212,7 @@
 .mobile {
   display: none;
 }
+
 @media (max-width: 767px) {
   .section-background {
       height: 100vh;
@@ -215,6 +223,43 @@
   } 
   .mobile {
       display: block;
+      z-index: 1000;
+  }
+  .footer {
+    z-index: 800;
+  }
+
+  .card1 {
+    --bs-card-spacer-y: 1rem;
+    --bs-card-spacer-x: 1rem;
+    --bs-card-title-spacer-y: 0.5rem;
+    --bs-card-border-width: 1px;
+    --bs-card-border-color: var(--bs-border-color-translucent);
+    --bs-card-border-radius: 0.375rem;
+    --bs-card-box-shadow: ;
+    --bs-card-inner-border-radius: calc(0.375rem - 1px);
+    --bs-card-cap-padding-y: 0.5rem;
+    --bs-card-cap-padding-x: 1rem;
+    --bs-card-cap-bg: rgba(0, 0, 0, 0.03);
+    --bs-card-cap-color: ;
+    --bs-card-height: ;
+    --bs-card-color: ;
+    --bs-card-bg: lavender;
+    --bs-card-img-overlay-padding: 1rem;
+    --bs-card-group-margin: 0.75rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-width: 0;
+    height: var(--bs-card-height);
+    word-wrap: break-word;
+    background-color: var(--bs-card-bg);
+    background-clip: border-box;
+    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    border-radius: var(--bs-card-border-radius);
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
 
@@ -226,7 +271,7 @@
 }
 
 .image {
-  background-image: url(../img/dashboard3.jpg);
+  background-image: url(../img/dashboard5.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
@@ -243,14 +288,22 @@
   padding: 10px;
   font-size: 25px;
   font-weight: 600;
-  color: black;
+  color: white;
   font-family: 'Shadows Into Light', cursive;
   font-style: italic;
   margin-top: 50px;
   padding-right: 50px;
 }
 
+.white-label {
+  color: white;
+  font-size: larger;
+  margin-top: 70px;
+  margin-right: 50px;
+}
+
 .comment {
+  display: flex;
   margin-bottom: 30px;
 }
 
@@ -905,6 +958,24 @@ progress {
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
 .row > * {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: var(--bs-gutter-y);
+}
+
+.row-1 {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  margin-right: calc(-0.5 * var(--bs-gutter-x));
+  margin-left: calc(-0.5 * var(--bs-gutter-x));
+}
+.row-1 > * {
   flex-shrink: 0;
   width: 100%;
   max-width: 100%;
@@ -2221,6 +2292,10 @@ form h1 {
   margin-top: 0.25rem;
   font-size: 0.875em;
   color: #6c757d;
+}
+
+.custom-label-class {
+  font-size: 20px;
 }
 
 .form-control {
@@ -3968,7 +4043,7 @@ textarea.form-control-lg {
   --bs-navbar-brand-padding-y: 0.3125rem;
   --bs-navbar-brand-margin-end: 1rem;
   --bs-navbar-brand-font-size: 1.25rem;
-  --bs-navbar-brand-color: rgba(0, 0, 0, 0.9);
+  --bs-navbar-brand-color: white;
   --bs-navbar-brand-hover-color: rgba(0, 0, 0, 0.9);
   --bs-navbar-nav-link-padding-x: 0.5rem;
   --bs-navbar-toggler-padding-y: 0.25rem;
@@ -4368,6 +4443,11 @@ textarea.form-control-lg {
   flex-grow: 0;
   padding: 0;
   overflow-y: visible;
+}
+
+.navbar-grandiant {
+  background: linear-gradient(90deg, rgba(174,199,203,1) 0%, rgba(160,191,194,1) 21%, rgba(136,173,181,1) 40%, rgba(54,117,135,1) 61%, rgba(16,67,94,1) 81%, rgba(10,40,70,1) 100%);
+  border: 2px solid black;
 }
 
 .navbar-dark {
@@ -7500,6 +7580,10 @@ textarea.form-control-lg {
   --bs-border-width: 5px;
 }
 
+.border-6 {
+  border: 1px solid black;
+}
+
 .border-opacity-10 {
   --bs-border-opacity: 0.1;
 }
@@ -8049,6 +8133,12 @@ textarea.form-control-lg {
   padding-top: 3rem !important;
   padding-bottom: 3rem !important;
 }
+
+.py-6 {
+  padding-top: 1.5rem !important;
+  padding-bottom: 4rem !important;
+}
+
 
 .pt-0 {
   padding-top: 0 !important;

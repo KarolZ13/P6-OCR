@@ -10,6 +10,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ForgotPasswordFormType extends AbstractType
 {
+
+
+    /**
+     * Short description here.
+     *
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

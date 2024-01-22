@@ -11,8 +11,8 @@ class MainController extends AbstractController
     #[Route('/', name: 'app_main')]
     public function index(TrickRepository $repo)
     {
-        // Récupération des 10 figures des plus récents aux plus anciens
-        $tricks = $repo->findBy([], ['created_at' => 'DESC'], 10, 0);
+        // Récupération des 12 tricks, des plus récents aux plus anciens
+        $tricks = $repo->findBy([], ['created_at' => 'DESC'], 20, 0);
 
         return $this->render('main/index.html.twig', [
             'tricks' => $tricks

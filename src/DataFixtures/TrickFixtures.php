@@ -12,10 +12,15 @@ use Doctrine\Persistence\ObjectManager;
 use Faker;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TrickFixtures extends Fixture
 {
-    public function __construct(private SluggerInterface $slugger, private UserPasswordHasherInterface $passwordEncoder,){}
+    private $filesystem;
+    public function __construct(private SluggerInterface $slugger, private UserPasswordHasherInterface $passwordEncoder, Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -23,13 +28,22 @@ class TrickFixtures extends Fixture
 
     for($i = 1; $i <= 7; $i++){
         $user = new User();
+        $username = $faker->username;
+        $user->setUsername($username);
         $user->setEmail($faker->email);
-        $user->setRoles([]);
+        $user->setRoles(["ROLE_USER"]);
         $user->setPassword(
-            $this->passwordEncoder->hashPassword($user, 'secret')
+            $this->passwordEncoder->hashPassword($user, $username)
         );
-        $user->setUsername($faker->username);
-        $user->setAvatar($faker->image(null, 640, 480));
+        $tempImagePath = $faker->image(null, 640, 480);
+        $destinationPath = __DIR__ . '/../../public/assets/img/';
+        $destinationFileName = 'faker_' . uniqid() . '.jpg';
+
+        $this->filesystem->copy($tempImagePath, $destinationPath . $destinationFileName);
+
+        // Mise à jour du nom du fichier dans l'entité
+        $user->setAvatar($destinationFileName);
+
         $user->setIsVerified('1');
         
         $manager->persist($user);
@@ -44,8 +58,9 @@ class TrickFixtures extends Fixture
         $userId = $this->getReference('user'.rand(1, 7));
         $trick->setIdUser($userId);
         $categoryId = $this->getReference('category_' . rand(1, 5));
-        $trick->setIdCategories($categoryId);
-        $trick->setTitle($faker->word());
+        $trick->setCategories($categoryId);
+        $uniqueTitle = $faker->unique()->word();
+        $trick->setTitle($uniqueTitle);
         $trick->setDescription($faker->text());
         $trick->setSlug($this->slugger->slug($trick->getTitle())->lower());
         $trick->setCreatedAt(new \DateTimeImmutable());
@@ -75,8 +90,26 @@ class TrickFixtures extends Fixture
         $picture = new Picture();
         $trickId = $this->getReference('trick' . rand(1, 10));
         $picture->setTrick($trickId);
-        $picture->setName($faker->image(null, 640, 480));
+        $tempImagePath = $faker->image(null, 640, 480);
+        $destinationPath = __DIR__ . '/../../public/assets/img/';
+        $destinationFileName = 'new_filename_' . uniqid() . '.jpg'; // Définissez le nom que vous souhaitez
+
+        $this->filesystem->copy($tempImagePath, $destinationPath . $destinationFileName);
+
+        // Mise à jour du nom du fichier dans l'entité
+        $picture->setName($destinationFileName);
+
         $manager->persist($picture);
+    }
+    $manager->flush();
+
+    for($m = 1; $m <= 20; $m++) {
+        $video = new Video();
+        $trickId = $this->getReference('trick' . rand(1, 10));
+        $video->setTrick($trickId);
+        $video->setName('https://www.youtube.com/watch?v=' . bin2hex(random_bytes(8)));
+
+        $manager->persist($video);
     }
     $manager->flush();
 

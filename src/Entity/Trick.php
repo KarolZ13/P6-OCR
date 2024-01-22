@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[UniqueEntity(fields: ['slug'], message: 'La figure est déjà existante')]
+#[UniqueEntity(fields: ['title'], message: 'La figure est déjà existante')]
 class Trick
 {
     #[ORM\Id]
@@ -41,10 +42,10 @@ class Trick
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, orphanRemoval: true, cascade: ["persist", "remove"])]
     private Collection $picture;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Video::class, orphanRemoval: true, fetch: 'EAGER', cascade: ["persist", "remove"])]
     private Collection $video;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
@@ -165,15 +166,13 @@ class Trick
         return $this;
     }
 
-    public function removePicture(Picture $picture): static
+    public function removePicture(Picture $picture): self
     {
         if ($this->picture->removeElement($picture)) {
-            // set the owning side to null (unless already changed)
             if ($picture->getTrick() === $this) {
                 $picture->setTrick(null);
             }
         }
-
         return $this;
     }
 
@@ -185,22 +184,21 @@ class Trick
         return $this->video;
     }
 
-    public function addVideo(Video $video): static
+    public function addVideo(Video $video): self
     {
         if (!$this->video->contains($video)) {
-            $this->video->add($video);
-            $video->setIdTrick($this);
+            $this->video[] = $video;
+            $video->setTrick($this);
         }
-
+    
         return $this;
     }
-
     public function removeVideo(Video $video): static
     {
         if ($this->video->removeElement($video)) {
             // set the owning side to null (unless already changed)
             if ($video->getIdTrick() === $this) {
-                $video->setIdTrick(null);
+                $video->setTrick(null);
             }
         }
 
