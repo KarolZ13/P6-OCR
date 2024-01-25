@@ -6,7 +6,7 @@ use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class CategoryFixtures extends Fixture
+class B_CategoryFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
