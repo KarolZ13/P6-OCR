@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\TrickRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 class MainController extends AbstractController
 {
@@ -17,5 +18,11 @@ class MainController extends AbstractController
         return $this->render('main/index.html.twig', [
             'tricks' => $tricks
         ]);
+    }
+
+    #[Route(path: '/404', name: 'app_404')]
+    public function error404(): Response
+    {
+        return $this->render('404.html.twig');
     }
 }

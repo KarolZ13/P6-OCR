@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class TrickController extends AbstractController
 {
@@ -30,8 +31,13 @@ class TrickController extends AbstractController
     }
 
     #[Route(path: '/add', name: 'app_add_trick')]
-    public function addTrick(MediaTrick $mediaTrick, Request $request, EntityManagerInterface $entityManager): Response
+    public function addTrick(MediaTrick $mediaTrick, Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+
+        if (!$security->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_404');
+        }
+
         $user = $this->getUser();
         $trick = new Trick();
         $trick->setIdUser($user);
@@ -75,8 +81,13 @@ class TrickController extends AbstractController
     }
 
     #[Route(path: '/edit/{slug}', name: 'app_edit_trick')]
-    public function editTrick(string $slug, EntityManagerInterface $entityManager, TrickRepository $trickRepository, Request $request, MediaTrick $mediaTrick): Response
+    public function editTrick(string $slug, EntityManagerInterface $entityManager, TrickRepository $trickRepository, Request $request, MediaTrick $mediaTrick, Security $security): Response
     {
+
+        if (!$security->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_404');
+        }
+
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
 
         $form = $this->createForm(EditTrickFormType::class, $trick);

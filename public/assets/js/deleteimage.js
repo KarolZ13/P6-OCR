@@ -1,28 +1,27 @@
-    document.addEventListener("DOMContentLoaded", function () {
-        var deleteButtons = document.querySelectorAll('.delete-picture-btn');
+document.addEventListener("DOMContentLoaded", function () {
+    var deleteButtons = document.querySelectorAll('.delete-picture-btn');
 
-        deleteButtons.forEach(function (button) {
-            button.addEventListener('click', function (event) {
-                event.preventDefault();
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
 
-                var deleteUrl = button.getAttribute('data-delete-url');
+            var deleteUrl = button.getAttribute('data-delete-url');
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open("DELETE", deleteUrl);
+            xhr.setRequestHeader("Content-Type", "application/json");
 
-                // Appel AJAX pour supprimer l'image
-                fetch(deleteUrl, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Gérez la réponse JSON, par exemple, actualisez la page si nécessaire
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
                     console.log(data);
                     location.reload();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
+                } else {
+                    console.error('Request failed. Status: ' + xhr.status);
+                }
+            };
+
+            xhr.send();
         });
     });
+});

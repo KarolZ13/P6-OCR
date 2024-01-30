@@ -92,7 +92,7 @@ class SecurityController extends AbstractController
             $user = $userRepository->findOneByUsername($data['username']);
 
             if ($user === null) {
-                $this->addFlash('danger', 'Cet utilisateur est inconnue.');
+                $this->addFlash('error', 'Cet utilisateur est inconnu.');
                 return $this->redirectToRoute('app_forgot_password');
             }
 
