@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class VideoType extends AbstractType
 {
 
-    
+
     /**
      * Short description here.
      *

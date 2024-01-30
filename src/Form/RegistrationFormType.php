@@ -55,12 +55,13 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Vous devez accépter la politique de confidentialité.',
                     ]),
                 ],
-                'label'=> 'J\'ai lu et j\'accepte la politique de confidentialité'
+                'label' => 'J\'ai lu et j\'accepte la politique de confidentialité'
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password',
-                'class' => 'form-control',
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'class' => 'form-control',
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -72,8 +73,7 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

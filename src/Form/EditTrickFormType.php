@@ -19,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class EditTrickFormType extends AbstractType 
+class EditTrickFormType extends AbstractType
 {
 
 

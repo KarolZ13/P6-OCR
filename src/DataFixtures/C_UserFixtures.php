@@ -21,25 +21,25 @@ class C_UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-    $faker = Faker\Factory::create('fr_FR');
+        $faker = Faker\Factory::create('fr_FR');
 
-    for($i = 1; $i <= 7; $i++){
-        $user = new User();
-        $username = $faker->username;
-        $user->setUsername($username);
-        $user->setEmail($faker->email);
-        $user->setRoles(["ROLE_USER"]);
-        $user->setPassword(
-            $this->passwordEncoder->hashPassword($user, $username)
-        );
-        
-        $user->setIsVerified('1');
+        for ($i = 1; $i <= 7; $i++) {
+            $user = new User();
+            $username = $faker->username;
+            $user->setUsername($username);
+            $user->setEmail($faker->email);
+            $user->setRoles(["ROLE_USER"]);
+            $user->setPassword(
+                $this->passwordEncoder->hashPassword($user, $username)
+            );
 
-        $manager->persist($user);
-        
-        $this->addReference('user'.$i, $user);
-    }
+            $user->setIsVerified('1');
 
-    $manager->flush();
+            $manager->persist($user);
+
+            $this->addReference('user' . $i, $user);
+        }
+
+        $manager->flush();
     }
 }

@@ -35,7 +35,7 @@ class SecurityController extends AbstractController
             $this->addFlash('success3', 'Vous êtes désormais connecté.');
             return $this->redirectToRoute('app_main');
         }
-    
+
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
@@ -50,39 +50,40 @@ class SecurityController extends AbstractController
     {
         // Suite à l'envoi de mail, vérification du token selon l'utilisateur
         $user = $userRepository->findOneBy(['token' => $token]);
-    
+
         // Si l'utilisateur n'est pas trouvé
         if ($user === null) {
             $this->addFlash('danger', 'Token inconnu');
             return $this->redirectToRoute('app_login');
         }
-    
+
         $form = $this->createForm(ResetPasswordFormType::class);
         $form->handleRequest($request);
-    
+
         // Récupération des informations du formulaire, mise à jour des informations en base de données
         if ($form->isSubmitted() && $form->isValid()) {
             $newPassword = $form->get('password')->getData();
             $hashPassword = $userPasswordHasher->hashPassword($user, $newPassword);
-    
+
             $user->setPassword($hashPassword);
             $user->setToken(null);
-    
+
             $entityManager->persist($user);
             $entityManager->flush();
-    
+
             $this->addFlash('success', 'Mot de passe mis à jour avec succès.');
             return $this->redirectToRoute('app_main');
         }
-    
+
         return $this->render('security/reset-password.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-    
+
 
     #[Route(path: '/forgot-password', name: 'app_forgot_password')]
-    public function forgotPassword(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, MailerInterface $mailer): Response {
+    public function forgotPassword(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
         $form = $this->createForm(ForgotPasswordFormType::class);
         $form->handleRequest($request);
 
@@ -118,25 +119,25 @@ class SecurityController extends AbstractController
             $this->addFlash('success3', 'Veuillez vérifier votre adresse mail !');
             return $this->redirectToRoute('app_forgot_password');
         }
-       return $this->render('security/forgot-password.html.twig', [
-        'form' => $form->createView(),
-       ]);
+        return $this->render('security/forgot-password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route(path: '/profil', name: 'app_user_profil')]
     public function userProfil(Request $request, Security $security, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = $security->getUser();
-        
+
         if ($user instanceof User) {
             $form = $this->createForm(UserFormType::class, $user);
-       
+
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                
+
                 // Vérifier si un nouveau mot de passe est fourni
                 $newPassword = $form->get('plainPassword')->getData();
-    
+
                 // Comparer directement les chaînes du nouveau et de l'ancien mot de passe
                 if ($userPasswordHasher->isPasswordValid($user, $newPassword)) {
                     $this->addFlash('error5', 'Le nouveau mot de passe doit être différent de l\'ancien.');
@@ -146,27 +147,27 @@ class SecurityController extends AbstractController
                         $hashPassword = $userPasswordHasher->hashPassword($user, $newPassword);
                         $user->setPassword($hashPassword);
                     }
-    
+
                     // Vérifier si un avatar est fourni
                     $newAvatar = $form->get('avatar')->getData();
                     if ($newAvatar instanceof UploadedFile) {
                         $user->setAvatar($newAvatar->getClientOriginalName());
                         $newAvatar->move('assets/img', $newAvatar->getClientOriginalName());
                     }
-    
+
                     $entityManager->persist($user);
                     $entityManager->flush();
-       
+
                     $this->addFlash('success1', 'Profil mis à jour avec succès.');
                 }
             }
-       
+
             return $this->render('main\user-profil.html.twig', [
-               'form' => $form->createView(),
-               'user' => $user,
+                'form' => $form->createView(),
+                'user' => $user,
             ]);
         }
-    
+
         return $this->redirectToRoute('app_login');
-    }    
+    }
 }

@@ -16,7 +16,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // Variable pour suivre la page actuelle
     let currentPage = 1;
 
-    // Fonction pour afficher les commentaires d'une page spécifique
+    /**
+     * Affiche les commentaires pour une page spécifique.
+     * 
+     * @param {number} page - Le numéro de la page à afficher.
+     */
     function showComments(page) {
         const startIndex = (page - 1) * commentsPerPage;
         const endIndex = startIndex + commentsPerPage;

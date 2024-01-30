@@ -43,7 +43,7 @@ class TrickController extends AbstractController
         $trick->setIdUser($user);
         $form = $this->createForm(AddTrickFormType::class, $trick, ['user' => $user]);
         $form->handleRequest($request);
-        
+
         // Récupération des informations du formulaire, mise à jour des informations en base de données
         if ($form->isSubmitted()) {
 
@@ -55,14 +55,14 @@ class TrickController extends AbstractController
                 try {
                     $mediaTrick->handlePictures($form->get('picture')->getData(), $trick, $entityManager);
                     $mediaTrick->handleVideos($form->get('video')->getData(), $trick, $entityManager);
-        
+
                     $trick->setCreatedAt(new \DateTimeImmutable());
-        
+
                     $entityManager->persist($trick);
                     $entityManager->flush();
-        
+
                     $this->addFlash('success', 'La figure a été ajoutée avec succès.');
-        
+
                     return $this->redirectToRoute('app_main');
                 } catch (\Exception $e) {
                     $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du trick.');
@@ -74,7 +74,7 @@ class TrickController extends AbstractController
                 $this->addFlash('error', $error->getMessage());
             }
         }
-    
+
         return $this->render('trick/add-trick.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -114,7 +114,7 @@ class TrickController extends AbstractController
 
             return $this->redirectToRoute('app_edit_trick', ['slug' => $newSlug]);
         }
-        
+
         // Afficher 20 images et vidéos maximum dans la page edit-trick
         $pictures = $mediaTrick->getTrickMedia($trick->getPicture(), 20);
         $videos = $mediaTrick->getTrickMedia($trick->getVideo(), 20, true);
@@ -137,7 +137,7 @@ class TrickController extends AbstractController
         if (!$trick) {
             throw $this->createNotFoundException('Trick not found');
         }
-        
+
         $user = $this->getUser();
 
         $comment = new Comment();
@@ -149,14 +149,14 @@ class TrickController extends AbstractController
 
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
-    
+
         // Récupération des informations du formulaire, mise à jour des informations en base de données
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setIdUser($user);
             $comment->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($comment);
             $entityManager->flush();
-    
+
             $this->addFlash('success', 'Le commentaire a été ajouté avec succès.');
             return $this->redirectToRoute('app_details_trick', ['slug' => $slug]);
         }
@@ -178,7 +178,7 @@ class TrickController extends AbstractController
         if ($trick) {
             $entityManager->remove($trick);
             $entityManager->flush();
-    
+
             $this->addFlash('success2', 'La figure a été supprimer avec succès.');
             return $this->redirectToRoute('app_main');
         }
@@ -192,22 +192,22 @@ class TrickController extends AbstractController
     public function deletePicture(string $slug, $pictureId, EntityManagerInterface $entityManager, PictureRepository $pictureRepository, TrickRepository $trickRepository): Response
     {
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
-    
+
         if (!$trick) {
             throw $this->createNotFoundException('Trick not found');
         }
-    
+
         $picture = $pictureRepository->find($pictureId);
-    
+
         if (!$picture) {
             throw $this->createNotFoundException('Picture not found');
         }
-    
+
         // Suppression d'une image dans la base de donnée
         $trick->removePicture($picture);
-    
+
         $entityManager->flush();
-    
+
         $this->addFlash('message', 'Image supprimée avec succès');
         return new JsonResponse(['message' => 'Image supprimée avec succès']);
     }
@@ -216,22 +216,22 @@ class TrickController extends AbstractController
     public function deleteVideo(string $slug, $videoId, EntityManagerInterface $entityManager, VideoRepository $videoRepository, TrickRepository $trickRepository): Response
     {
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
-    
+
         if (!$trick) {
             throw $this->createNotFoundException('Trick not found');
         }
-    
+
         $video = $videoRepository->find($videoId);
-    
+
         if (!$video) {
             throw $this->createNotFoundException('Picture not found');
         }
-    
+
         // Suppression d'une vidéo dans la base de donnée
         $trick->removeVideo($video);
-    
+
         $entityManager->flush();
-    
+
         $this->addFlash('message', 'Video supprimée avec succès');
         return new JsonResponse(['message' => 'Video supprimée avec succès']);
     }

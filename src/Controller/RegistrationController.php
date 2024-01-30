@@ -48,7 +48,9 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // Envoyer un mail de confirmation pour valider le compte
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('admin@snowtricks.fr', 'No Reply'))
                     ->to($user->getEmail())
@@ -81,7 +83,6 @@ class RegistrationController extends AbstractController
         // Mise en place de User::isVerified=true en base de données
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
-            
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
