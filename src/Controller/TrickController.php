@@ -19,7 +19,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class TrickController extends AbstractController
 {
@@ -84,11 +84,16 @@ class TrickController extends AbstractController
     public function editTrick(string $slug, EntityManagerInterface $entityManager, TrickRepository $trickRepository, Request $request, MediaTrick $mediaTrick, Security $security): Response
     {
 
-        if (!$security->isGranted('ROLE_USER')) {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+    
+        $trick = $trickRepository->findOneBy(['slug' => $slug]);
+    
+        // Vérifier si l'utilisateur est le créateur du trick
+        if ($this->getUser() !== $trick->getIdUser()) {
             return $this->redirectToRoute('app_404');
         }
-
-        $trick = $trickRepository->findOneBy(['slug' => $slug]);
 
         $form = $this->createForm(EditTrickFormType::class, $trick);
         $form->handleRequest($request);
@@ -170,9 +175,18 @@ class TrickController extends AbstractController
     }
 
     #[Route(path: '/delete/{slug}', name: 'app_delete_trick')]
-    public function deleteTrick(string $slug, EntityManagerInterface $entityManager, TrickRepository $trickRepository): Response
+    public function deleteTrick(string $slug, EntityManagerInterface $entityManager, TrickRepository $trickRepository, Security $security): Response
     {
+
+        if (!$security->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('app_404');
+        }
+
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
+
+        if ($this->getUser() !== $trick->getIdUser()) {
+            return $this->redirectToRoute('app_404');
+        }
 
         // Suppression du trick dans la base de donnée
         if ($trick) {
@@ -191,7 +205,17 @@ class TrickController extends AbstractController
     #[Route(path: '/edit/{slug}/delete-picture/{pictureId}', name: 'app_delete_picture')]
     public function deletePicture(string $slug, $pictureId, EntityManagerInterface $entityManager, PictureRepository $pictureRepository, TrickRepository $trickRepository): Response
     {
+
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+    
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
+    
+        // Vérifier si l'utilisateur est le créateur du trick
+        if ($this->getUser() !== $trick->getIdUser()) {
+            return $this->redirectToRoute('app_404');
+        }
 
         if (!$trick) {
             throw $this->createNotFoundException('Trick not found');
@@ -215,8 +239,17 @@ class TrickController extends AbstractController
     #[Route(path: '/edit/{slug}/delete-video/{videoId}', name: 'app_delete_video')]
     public function deleteVideo(string $slug, $videoId, EntityManagerInterface $entityManager, VideoRepository $videoRepository, TrickRepository $trickRepository): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+    
         $trick = $trickRepository->findOneBy(['slug' => $slug]);
-
+    
+        // Vérifier si l'utilisateur est le créateur du trick
+        if ($this->getUser() !== $trick->getIdUser()) {
+            return $this->redirectToRoute('app_404');
+        }
+        
         if (!$trick) {
             throw $this->createNotFoundException('Trick not found');
         }

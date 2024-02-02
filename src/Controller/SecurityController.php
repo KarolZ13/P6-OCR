@@ -18,7 +18,7 @@ use App\Form\ResetPasswordFormType;
 use App\Form\UserFormType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SecurityController extends AbstractController

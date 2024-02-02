@@ -213,6 +213,10 @@
   display: none;
 }
 
+.view-media {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .section-background {
       height: 100vh;
@@ -225,6 +229,15 @@
       display: block;
       z-index: 1000;
   }
+
+  .media {
+    display: none;
+  }
+
+  .view-media {
+    display: block;
+  }
+
   .footer {
     z-index: 800;
   }
